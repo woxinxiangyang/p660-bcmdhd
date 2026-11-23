@@ -20,9 +20,11 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq bc bison flex libssl-dev build-essential \
-            gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu python3 curl
-          sudo apt-get install -y -qq gcc-10 || echo "gcc-10 unavailable, fallback to default"
-          gcc-10 --version 2>/dev/null | head -1 || echo "no gcc-10"
+            gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu python3 curl libelf-dev
+          sudo apt-get install -y -qq gcc-10 gcc-10-aarch64-linux-gnu \
+            || echo "gcc-10 variants unavailable"
+          gcc-10 --version 2>/dev/null | head -1 || echo "no host gcc-10"
+          aarch64-linux-gnu-gcc-10 --version 2>/dev/null | head -1 || echo "no cross gcc-10"
           aarch64-linux-gnu-gcc --version | head -1
 
       - name: Build bcmdhd.ko
