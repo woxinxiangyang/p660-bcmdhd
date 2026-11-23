@@ -1,7 +1,11 @@
-extern void *get_ukdev(void);
+/* [P660 patch] 车机内核未导出华阳的 key_unify 私有接口（kallsyms 里没有 get_ukdev /
+ * key_unify_size / key_unify_read），改成弱引用：符号缺失时装载为 NULL，
+ * 由下面 getUnifyKey()/kzalloc2getUnifyKey() 的守卫直接降级返回错误。
+ * 这三个接口只用于读取 wifi_ccode / usid 等可选配置，失败会走默认值。 */
+extern void *get_ukdev(void) __attribute__((weak));
 extern int key_unify_read(void *ukdev, char *keyname, unsigned char *keydata,
-		unsigned int datalen, unsigned int *reallen);
-extern int key_unify_size(void *ukdev, char *keyname, unsigned int *reallen);
+		unsigned int datalen, unsigned int *reallen) __attribute__((weak));
+extern int key_unify_size(void *ukdev, char *keyname, unsigned int *reallen) __attribute__((weak));
 
 #include <typedefs.h>
 #include <osl.h>
@@ -3723,6 +3727,10 @@ static int getUnifyKey(char * inKeyName, unsigned char * outValueBuf, unsigned i
 	if (NULL == inKeyName || NULL == outValueBuf || 0 == inValueBufSize) {
 		return -1;
 	}
+	/* [P660 patch] 弱引用缺失（本机内核无 key_unify 接口）时直接降级 */
+	if (!get_ukdev || !key_unify_size || !key_unify_read) {
+		return -1;
+	}
 	memset(outValueBuf, 0, inValueBufSize);
 	if (key_unify_size(get_ukdev(), inKeyName, &keyLen) < 0) {
 		return -1;
@@ -3759,6 +3767,10 @@ char * kzalloc2getUnifyKey(char * inKeyName) {
 	unsigned char * buf = NULL;
 
 	if (NULL == inKeyName) {
+		return NULL;
+	}
+	/* [P660 patch] 弱引用缺失（本机内核无 key_unify 接口）时直接降级 */
+	if (!get_ukdev || !key_unify_size || !key_unify_read) {
 		return NULL;
 	}
 
