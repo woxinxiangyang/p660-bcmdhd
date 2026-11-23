@@ -31,7 +31,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: work/linux-imx
-          key: kbuild-${{ hashFiles('config/p660_hsae.config','scripts/build.sh','scripts/patch_tree.sh') }}
+          key: kbuild-${{ hashFiles('config/p660_hsae.config') }}
           restore-keys: |
             kbuild-
 
@@ -58,7 +58,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: work/linux-imx
-          key: kbuild-${{ hashFiles('config/p660_hsae.config','scripts/build.sh','scripts/patch_tree.sh') }}
+          key: kbuild-${{ hashFiles('config/p660_hsae.config') }}
 
       - name: Publish log to ci-logs branch
         if: always()

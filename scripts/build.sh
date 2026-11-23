@@ -125,11 +125,13 @@ fi
 echo "Module.symvers entries: $(wc -l < Module.symvers)"
 
 echo "===== [6/7] 编译 bcmdhd.ko ====="
-if ! mk -j"$JOBS" M=drivers/net/wireless/broadcom/bcmdhd modules > module_build.log 2>&1; then
+# -k 让 make 继续编其余文件，一次拿到全部错误清单（否则每轮只能发现一个，迭代太慢）
+if ! mk -k -j"$JOBS" M=drivers/net/wireless/broadcom/bcmdhd modules > module_build.log 2>&1; then
   echo "!!! module build FAILED"
-  grep -E "error:|Error [0-9]" module_build.log | head -40 || true
-  echo "--- last 100 lines ---"
-  tail -100 module_build.log
+  echo "--- 全部 error（去重）---"
+  grep -E "error:" module_build.log | sed 's/^.*bcmdhd\///' | sort -u | head -60 || true
+  echo "--- 最后一个 error 的上下文 ---"
+  tail -60 module_build.log
   exit 1
 fi
 grep -E "warning:|error:" module_build.log | head -20 || true
