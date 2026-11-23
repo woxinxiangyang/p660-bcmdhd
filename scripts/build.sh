@@ -40,8 +40,11 @@ echo "CROSSCC = $(aarch64-linux-gnu-gcc --version 2>/dev/null | head -1)"
 echo "JOBS    = $JOBS"
 
 mk() {
+  # KCFLAGS 会被追加到内核全局 CFLAGS：老内核依赖 -fcommon 的"暂定定义"，
+  # gcc-10 起 -fno-common 成默认值，不加会满屏 multiple definition
   make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- \
-       HOSTCC="$HOSTCC_BIN" HOSTCFLAGS="$HOST_FLAGS" HOSTCXXFLAGS="-O2" "$@"
+       HOSTCC="$HOSTCC_BIN" HOSTCFLAGS="$HOST_FLAGS" HOSTCXXFLAGS="-O2" \
+       KCFLAGS="-fcommon" "$@"
 }
 
 echo "===== [1/7] 下载 NXP 内核源码 ====="
@@ -56,7 +59,21 @@ head -5 Makefile | grep -E "VERSION|PATCHLEVEL|SUBLEVEL" || true
 # HOSTCFLAGS 存在性自检（4.14 用的就是这个名字）
 grep -m1 -n "^HOSTCFLAGS" Makefile || echo "WARN: no HOSTCFLAGS line found"
 
-echo "===== [2/7] 应用车机内核配置 ====="
+echo "===== [2/7] 宿主工具链兼容性修补 ====="
+# (a) 4.14 的 security/selinux/include/classmap.h 用宿主 glibc 的 PF_MAX 做断言；
+#     新版 glibc 多了 AF_MCTP 等，会直接 #error 掉 genheaders。放宽上限即可，
+#     只影响构建期生成的头文件，与模块 CRC 无关。
+if grep -qE '^#if PF_MAX > [0-9]+$' security/selinux/include/classmap.h; then
+  sed -i -E 's/^#if PF_MAX > [0-9]+$/#if PF_MAX > 200/' security/selinux/include/classmap.h
+  mkdir -p scripts/selinux/genheaders 2>/dev/null || true
+  # 某些版本 genheaders 目录下需要 .gitignore 占位（避免 make 报 "No rule to make target"）
+  grep -n "PF_MAX" security/selinux/include/classmap.h | head -2
+  echo "patched classmap.h PF_MAX guard"
+fi
+# (b) 确认 HOSTCFLAGS 存在（4.14 的变量名；4.17+ 才叫 KBUILD_HOSTCFLAGS）
+grep -m1 -n "^HOSTCFLAGS" Makefile || echo "WARN: no HOSTCFLAGS line"
+
+echo "===== [2.5/7] 应用车机内核配置 ====="
 cp "$SRC/config/p660_hsae.config" "$KERNEL/.config"
 echo "config lines: $(wc -l < .config)"
 
