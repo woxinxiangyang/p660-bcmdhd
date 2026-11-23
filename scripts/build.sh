@@ -40,11 +40,13 @@ echo "CROSSCC = $(aarch64-linux-gnu-gcc --version 2>/dev/null | head -1)"
 echo "JOBS    = $JOBS"
 
 mk() {
-  # KCFLAGS 会被追加到内核全局 CFLAGS：老内核依赖 -fcommon 的"暂定定义"，
-  # gcc-10 起 -fno-common 成默认值，不加会满屏 multiple definition
+  # KCFLAGS 会被追加到内核全局 CFLAGS（同一变量后写的覆盖前面的）：
+  #  -fcommon：老内核依赖"暂定定义"，gcc-10 起 -fno-common 成默认值
+  #  -Wno-error=implicit-*：4.14 把隐式声明当错误，老代码里若干函数原型只在内部头里
+  #  注意：产物只用于取 Module.symvers 的符号 CRC，不会上机运行，故这些降级不影响结论
   make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- \
        HOSTCC="$HOSTCC_BIN" HOSTCFLAGS="$HOST_FLAGS" HOSTCXXFLAGS="-O2" \
-       KCFLAGS="-fcommon" "$@"
+       KCFLAGS="-fcommon -Wno-error=implicit-function-declaration -Wno-error=implicit-int -Wno-error=incompatible-pointer-types -Wno-error=int-conversion" "$@"
 }
 
 echo "===== [1/7] 下载 NXP 内核源码 ====="
@@ -72,6 +74,17 @@ if grep -qE '^#if PF_MAX > [0-9]+$' security/selinux/include/classmap.h; then
 fi
 # (b) 确认 HOSTCFLAGS 存在（4.14 的变量名；4.17+ 才叫 KBUILD_HOSTCFLAGS）
 grep -m1 -n "^HOSTCFLAGS" Makefile || echo "WARN: no HOSTCFLAGS line"
+
+# (c) dm-rq.c 调用了 elv_register_queue()，但该声明只在 block/blk.h（块层内部头）里，
+#     公开头 linux/elevator.h 没有。gcc-10 把隐式声明当错误。补一条 extern 声明即可，
+#     符号本身在 block/elevator.c 中确实存在，不改变行为。
+if grep -q "elv_register_queue(md->queue)" drivers/md/dm-rq.c 2>/dev/null; then
+  if ! grep -q "extern int elv_register_queue" drivers/md/dm-rq.c; then
+    sed -i '0,/#include <linux\/blk-mq.h>/s//#include <linux\/blk-mq.h>\nextern int elv_register_queue(struct request_queue *q);/' drivers/md/dm-rq.c
+    echo "patched dm-rq.c: extern elv_register_queue"
+  fi
+  grep -n "extern int elv_register_queue" drivers/md/dm-rq.c
+fi
 
 echo "===== [2.5/7] 应用车机内核配置 ====="
 cp "$SRC/config/p660_hsae.config" "$KERNEL/.config"

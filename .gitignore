@@ -1,0 +1,6 @@
+blog*.json
+dl_*.json
+final_build.log
+vmlinux_build.log
+module_build.log
+__pycache__/
