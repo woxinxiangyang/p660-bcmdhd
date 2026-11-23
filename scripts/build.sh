@@ -49,6 +49,15 @@ mk() {
        KCFLAGS="-fcommon -Wno-error=implicit-function-declaration -Wno-error=implicit-int -Wno-error=incompatible-pointer-types -Wno-error=int-conversion" "$@"
 }
 
+# 模块必须用 -fno-common 编译：内核 simplify_symbols() 遇到 SHN_COMMON 直接
+# "please compile with -fno-common" 并拒绝装载模块。上面的 -fcommon 只是给
+# 老内核(vmlinux/工具)用的，不能带到 .ko 里。
+mkmod() {
+  make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- \
+       HOSTCC="$HOSTCC_BIN" HOSTCFLAGS="$HOST_FLAGS" HOSTCXXFLAGS="-O2" \
+       KCFLAGS="-fno-common -Wno-error=implicit-function-declaration -Wno-error=implicit-int -Wno-error=incompatible-pointer-types -Wno-error=int-conversion" "$@"
+}
+
 echo "===== [1/7] 下载 NXP 内核源码 ====="
 if [ ! -d "$KERNEL" ]; then
   curl -L --retry 5 --retry-delay 3 -o "$WORK/kernel.tar.gz" "$KURL"
@@ -126,7 +135,7 @@ echo "Module.symvers entries: $(wc -l < Module.symvers)"
 
 echo "===== [6/7] 编译 bcmdhd.ko ====="
 # -k 让 make 继续编其余文件，一次拿到全部错误清单（否则每轮只能发现一个，迭代太慢）
-if ! mk -k -j"$JOBS" M=drivers/net/wireless/broadcom/bcmdhd modules > module_build.log 2>&1; then
+if ! mkmod -k -j"$JOBS" M=drivers/net/wireless/broadcom/bcmdhd modules > module_build.log 2>&1; then
   echo "!!! module build FAILED"
   echo "--- 全部 error（去重）---"
   grep -E "error:" module_build.log | sed 's/^.*bcmdhd\///' | sort -u | head -60 || true
@@ -141,6 +150,13 @@ echo "===== [7/7] 产物检查 + CRC 核对 ====="
 KO=$(find drivers/net/wireless/broadcom/bcmdhd -name '*.ko' | head -1)
 echo "KO file: $KO"
 ls -la "$KO"
+# COMMON 符号会让内核 simplify_symbols() 直接拒装，这里显式拦一道
+if grep -q "is COMMON symbol" module_build.log; then
+  echo "!!! 模块里仍有 COMMON 符号（装载会被内核拒绝）:"
+  grep "is COMMON symbol" module_build.log | wc -l
+else
+  echo "COMMON symbol check: clean"
+fi
 python3 - "$KO" <<'PY'
 import sys, re
 data = open(sys.argv[1], 'rb').read()
