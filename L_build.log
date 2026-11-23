@@ -1,0 +1,134 @@
+HOSTCC  = gcc-10 (gcc-10 (Ubuntu 10.5.0-1ubuntu1~22.04.3) 10.5.0)
+CROSSCC = aarch64-linux-gnu-gcc (Ubuntu 10.5.0-1ubuntu1~22.04.3) 10.5.0
+JOBS    = 4
+===== [1/7] 下载 NXP 内核源码 =====
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  7  153M    7 11.0M    0     0  39.3M      0  0:00:03 --:--:--  0:00:03 39.3M 68  153M   68  104M    0     0  81.6M      0  0:00:01  0:00:01 --:--:-- 81.6M100  153M  100  153M    0     0  86.4M      0  0:00:01  0:00:01 --:--:-- 86.3M
+kernel tree size: 920M
+VERSION = 4
+PATCHLEVEL = 14
+SUBLEVEL = 78
+EXTRAVERSION =
+366:HOSTCFLAGS   := -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 \
+===== [2/7] 宿主工具链兼容性修补 =====
+244:#if PF_MAX > 200
+patched classmap.h PF_MAX guard
+366:HOSTCFLAGS   := -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 \
+patched dm-rq.c: extern elv_register_queue
+12:extern int elv_register_queue(struct request_queue *q);
+===== [2.5/7] 应用车机内核配置 =====
+config lines: 7162
+===== [3/7] 集成 bcmdhd 驱动 =====
+== 复制驱动源码 ==
+== 挂接 Kconfig ==
+== 挂接 Makefile ==
+== 集成完成 ==
+/home/runner/work/p660-bcmdhd/p660-bcmdhd/work/linux-imx/drivers/net/wireless/broadcom/Kconfig:17:source "drivers/net/wireless/broadcom/bcmdhd/Kconfig"
+/home/runner/work/p660-bcmdhd/p660-bcmdhd/work/linux-imx/drivers/net/wireless/broadcom/Makefile:6:obj-$(CONFIG_BCMDHD)	+= bcmdhd/
+73
+40
+Kconfig hooked
+Makefile hooked
+===== [4/7] olddefconfig =====
+CONFIG_MODULES=y
+CONFIG_MODVERSIONS=y
+CONFIG_BCMDHD=m
+===== [5/7] 编译 vmlinux (生成带真实 CRC 的 Module.symvers) =====
+start: 15:13:52
+end: 15:24:05
+  LD      vmlinux
+  SORTEX  vmlinux
+  SYSMAP  System.map
+Module.symvers entries: 12048
+===== [6/7] 编译 bcmdhd.ko =====
+!!! module build FAILED
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux_platdev.c:350:37: error: ‘dhd_wlan_control’ undeclared (first use in this function); did you mean ‘dhd_wlan_init’?
+make[1]: *** [scripts/Makefile.build:328: drivers/net/wireless/broadcom/bcmdhd/dhd_linux_platdev.o] Error 1
+make: *** [Makefile:1527: _module_drivers/net/wireless/broadcom/bcmdhd] Error 2
+--- last 100 lines ---
+drivers/net/wireless/broadcom/bcmdhd/Makefile:270: warning: overriding recipe for target 'clean'
+drivers/net/wireless/broadcom/bcmdhd/Makefile:259: warning: ignoring old recipe for target 'clean'
+  CC [M]  drivers/net/wireless/broadcom/bcmdhd/aiutils.o
+  CC [M]  drivers/net/wireless/broadcom/bcmdhd/siutils.o
+  CC [M]  drivers/net/wireless/broadcom/bcmdhd/sbutils.o
+  CC [M]  drivers/net/wireless/broadcom/bcmdhd/bcmutils.o
+drivers/net/wireless/broadcom/bcmdhd/bcmutils.c: In function ‘pktsetprio’:
+drivers/net/wireless/broadcom/bcmdhd/bcmutils.c:275:17: warning: converting a packed ‘struct ether_header’ pointer (alignment 1) to a ‘struct ethervlan_header’ pointer (alignment 2) may result in an unaligned pointer value [-Waddress-of-packed-member]
+  275 |   evh = (struct ethervlan_header *)eh;
+      |                 ^~~~~~~~~~~~~~~~
+In file included from drivers/net/wireless/broadcom/bcmdhd/bcmutils.c:65:
+drivers/net/wireless/broadcom/bcmdhd/include/ethernet.h:124:30: note: defined here
+  124 | BWL_PRE_PACKED_STRUCT struct ether_header {
+      |                              ^~~~~~~~~~~~
+In file included from drivers/net/wireless/broadcom/bcmdhd/bcmutils.c:66:
+drivers/net/wireless/broadcom/bcmdhd/include/vlan.h:62:8: note: defined here
+   62 | struct ethervlan_header {
+      |        ^~~~~~~~~~~~~~~~
+drivers/net/wireless/broadcom/bcmdhd/bcmutils.c: In function ‘pktgetdscp’:
+drivers/net/wireless/broadcom/bcmdhd/bcmutils.c:424:17: warning: converting a packed ‘struct ether_header’ pointer (alignment 1) to a ‘struct ethervlan_header’ pointer (alignment 2) may result in an unaligned pointer value [-Waddress-of-packed-member]
+  424 |   evh = (struct ethervlan_header *)eh;
+      |                 ^~~~~~~~~~~~~~~~
+In file included from drivers/net/wireless/broadcom/bcmdhd/bcmutils.c:65:
+drivers/net/wireless/broadcom/bcmdhd/include/ethernet.h:124:30: note: defined here
+  124 | BWL_PRE_PACKED_STRUCT struct ether_header {
+      |                              ^~~~~~~~~~~~
+In file included from drivers/net/wireless/broadcom/bcmdhd/bcmutils.c:66:
+drivers/net/wireless/broadcom/bcmdhd/include/vlan.h:62:8: note: defined here
+   62 | struct ethervlan_header {
+      |        ^~~~~~~~~~~~~~~~
+  CC [M]  drivers/net/wireless/broadcom/bcmdhd/bcmwifi_channels.o
+  CC [M]  drivers/net/wireless/broadcom/bcmdhd/dhd_linux.o
+  CC [M]  drivers/net/wireless/broadcom/bcmdhd/dhd_linux_platdev.o
+  CC [M]  drivers/net/wireless/broadcom/bcmdhd/dhd_linux_sched.o
+In file included from drivers/net/wireless/broadcom/bcmdhd/include/linuxver.h:55,
+                 from drivers/net/wireless/broadcom/bcmdhd/dhd_linux.c:32:
+./include/linux/module.h:131:6: warning: ‘init_module’ specifies less restrictive attribute than its target ‘dhd_module_init’: ‘cold’ [-Wmissing-attributes]
+  131 |  int init_module(void) __attribute__((alias(#initfn)));
+      |      ^~~~~~~~~~~
+./include/linux/module.h:121:28: note: in expansion of macro ‘module_init’
+  121 | #define late_initcall(fn)  module_init(fn)
+      |                            ^~~~~~~~~~~
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux.c:12665:1: note: in expansion of macro ‘late_initcall’
+12665 | late_initcall(dhd_module_init);
+      | ^~~~~~~~~~~~~
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux.c:12576:1: note: ‘init_module’ target declared here
+12576 | dhd_module_init(void)
+      | ^~~~~~~~~~~~~~~
+In file included from drivers/net/wireless/broadcom/bcmdhd/include/linuxver.h:55,
+                 from drivers/net/wireless/broadcom/bcmdhd/dhd_linux.c:32:
+./include/linux/module.h:137:7: warning: ‘cleanup_module’ specifies less restrictive attribute than its target ‘dhd_module_exit’: ‘cold’ [-Wmissing-attributes]
+  137 |  void cleanup_module(void) __attribute__((alias(#exitfn)));
+      |       ^~~~~~~~~~~~~~
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux.c:12668:1: note: in expansion of macro ‘module_exit’
+12668 | module_exit(dhd_module_exit);
+      | ^~~~~~~~~~~
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux.c:12567:1: note: ‘cleanup_module’ target declared here
+12567 | dhd_module_exit(void)
+      | ^~~~~~~~~~~~~~~
+  CC [M]  drivers/net/wireless/broadcom/bcmdhd/dhd_pno.o
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux_platdev.c: In function ‘wifi_plat_dev_drv_probe’:
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux_platdev.c:350:37: error: ‘dhd_wlan_control’ undeclared (first use in this function); did you mean ‘dhd_wlan_init’?
+  350 |  adapter->wifi_plat_data = (void *)&dhd_wlan_control;
+      |                                     ^~~~~~~~~~~~~~~~
+      |                                     dhd_wlan_init
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux_platdev.c:350:37: note: each undeclared identifier is reported only once for each function it appears in
+make[1]: *** [scripts/Makefile.build:328: drivers/net/wireless/broadcom/bcmdhd/dhd_linux_platdev.o] Error 1
+make[1]: *** Waiting for unfinished jobs....
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux.c: In function ‘dhd_dev_start_mkeep_alive’:
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux.c:14657:2: warning: ‘strncpy’ output truncated before terminating nul copying 11 bytes from a string of the same length [-Wstringop-truncation]
+14657 |  strncpy(pbuf, str, str_len);
+      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux.c: In function ‘dhd_convert_memdump_type_to_str’:
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux.c:15709:2: warning: ‘strncpy’ output may be truncated copying between 7 and 31 bytes from a string of length 31 [-Wstringop-truncation]
+15709 |  strncpy(buf, type_str, strlen(type_str));
+      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux.c: In function ‘dhd_allocate_if’:
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux.c:7800:3: warning: ‘strncpy’ specified bound 16 equals destination size [-Wstringop-truncation]
+ 7800 |   strncpy(ifp->net->name, name, IFNAMSIZ);
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux.c: In function ‘dhd_ifadd_event_handler’:
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux.c:2806:3: warning: ‘strncpy’ output may be truncated copying 16 bytes from a string of length 16 [-Wstringop-truncation]
+ 2806 |   strncpy(info.name, if_event->name, IFNAMSIZ);
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+make: *** [Makefile:1527: _module_drivers/net/wireless/broadcom/bcmdhd] Error 2

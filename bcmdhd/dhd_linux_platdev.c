@@ -87,6 +87,13 @@ struct wifi_platform_data dhd_wlan_control = {0};
 #endif /* CONFIG_OF && !defined(CONFIG_ARCH_MSM) */
 #endif /* !defind(CONFIG_DTS) */
 
+/* [P660 patch] CONFIG_DTS 路径下 dhd_wlan_control 由 dhd_gpio.c 定义（该文件参与编译），
+ * 但本文件里它的声明被 #if !defined(CONFIG_DTS) 包住了，导致 probe 中引用时"未声明"。
+ * 这里补一条外部声明，不产生重复定义。 */
+#if defined(CONFIG_DTS)
+extern struct wifi_platform_data dhd_wlan_control;
+#endif /* CONFIG_DTS */
+
 static int dhd_wifi_platform_load(void);
 
 extern void* wl_cfg80211_get_dhdp(struct net_device *dev);
