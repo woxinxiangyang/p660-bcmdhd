@@ -27,8 +27,8 @@ jobs:
           aarch64-linux-gnu-gcc-10 --version 2>/dev/null | head -1 || echo "no cross gcc-10"
           aarch64-linux-gnu-gcc --version | head -1
 
-      - name: Cache kernel build tree
-        uses: actions/cache@v4
+      - name: Restore kernel tree
+        uses: actions/cache/restore@v4
         with:
           path: work/linux-imx
           key: kbuild-${{ hashFiles('config/p660_hsae.config','scripts/build.sh','scripts/patch_tree.sh') }}
@@ -51,6 +51,14 @@ jobs:
             work/out/*.log
             build.log
           if-no-files-found: warn
+
+      - name: Save kernel tree
+        if: always()
+        continue-on-error: true
+        uses: actions/cache/save@v4
+        with:
+          path: work/linux-imx
+          key: kbuild-${{ hashFiles('config/p660_hsae.config','scripts/build.sh','scripts/patch_tree.sh') }}
 
       - name: Publish log to ci-logs branch
         if: always()

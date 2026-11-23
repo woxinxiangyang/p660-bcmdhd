@@ -4,7 +4,7 @@ JOBS    = 4
 ===== [1/7] 下载 NXP 内核源码 =====
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100 12961    0 12961    0     0  16106      0 --:--:-- --:--:-- --:--:-- 16100100 4112k    0 4112k    0     0  2895k      0 --:--:--  0:00:01 --:--:-- 2893k100 10.0M    0 10.0M    0     0  4243k      0 --:--:--  0:00:02 --:--:-- 4243k100 17.2M    0 17.2M    0     0  5140k      0 --:--:--  0:00:03 --:--:-- 5139k100 24.0M    0 24.0M    0     0  5570k      0 --:--:--  0:00:04 --:--:-- 5570k100 30.3M    0 30.3M    0     0  5748k      0 --:--:--  0:00:05 --:--:-- 6748k100 36.8M    0 36.8M    0     0  5883k      0 --:--:--  0:00:06 --:--:-- 6734k100 41.7M    0 41.7M    0     0  5726k      0 --:--:--  0:00:07 --:--:-- 6435k100 45.7M    0 45.7M    0     0  5554k      0 --:--:--  0:00:08 --:--:-- 5837k100 51.2M    0 51.2M    0     0  5569k      0 --:--:--  0:00:09 --:--:-- 5568k100 56.5M    0 56.5M    0     0  5546k      0 --:--:--  0:00:10 --:--:-- 5330k100 61.8M    0 61.8M    0     0  5538k      0 --:--:--  0:00:11 --:--:-- 5096k100 66.5M    0 66.5M    0     0  5477k      0 --:--:--  0:00:12 --:--:-- 5102k100 72.0M    0 72.0M    0     0  5479k      0 --:--:--  0:00:13 --:--:-- 5355k100 77.2M    0 77.2M    0     0  5483k      0 --:--:--  0:00:14 --:--:-- 5323k100 80.5M    0 80.5M    0     0  5337k      0 --:--:--  0:00:15 --:--:-- 4905k100 84.5M    0 84.5M    0     0  5270k      0 --:--:--  0:00:16 --:--:-- 4656k100 89.0M    0 89.0M    0     0  5225k      0 --:--:--  0:00:17 --:--:-- 4600k100 93.5M    0 93.5M    0     0  5194k      0 --:--:--  0:00:18 --:--:-- 4420k100 98.5M    0 98.5M    0     0  5190k      0 --:--:--  0:00:19 --:--:-- 4347k100  103M    0  103M    0     0  5158k      0 --:--:--  0:00:20 --:--:-- 4602k100  107M    0  107M    0     0  5088k      0 --:--:--  0:00:21 --:--:-- 4504k100  109M    0  109M    0     0  4986k      0 --:--:--  0:00:22 --:--:-- 4160k100  111M    0  111M    0     0  4869k      0 --:--:--  0:00:23 --:--:-- 3677k100  114M    0  114M    0     0  4793k      0 --:--:--  0:00:24 --:--:-- 3275k100  116M    0  116M    0     0  4696k      0 --:--:--  0:00:25 --:--:-- 2811k100  119M    0  119M    0     0  4617k      0 --:--:--  0:00:26 --:--:-- 2539k100  121M    0  121M    0     0  4512k      0 --:--:--  0:00:27 --:--:-- 2438k100  124M    0  124M    0     0  4474k      0 --:--:--  0:00:28 --:--:-- 2634k100  127M    0  127M    0     0  4420k      0 --:--:--  0:00:29 --:--:-- 2553k100  129M    0  129M    0     0  4365k      0 --:--:--  0:00:30 --:--:-- 2674k100  133M    0  133M    0     0  4328k      0 --:--:--  0:00:31 --:--:-- 2816k100  136M    0  136M    0     0  4312k      0 --:--:--  0:00:32 --:--:-- 3155k100  139M    0  139M    0     0  4268k      0 --:--:--  0:00:33 --:--:-- 3077k100  142M    0  142M    0     0  4220k      0 --:--:--  0:00:34 --:--:-- 3068k100  144M    0  144M    0     0  4166k      0 --:--:--  0:00:35 --:--:-- 2971k100  147M    0  147M    0     0  4141k      0 --:--:--  0:00:36 --:--:-- 2947k100  151M    0  151M    0     0  4128k      0 --:--:--  0:00:37 --:--:-- 2948k100  153M    0  153M    0     0  4132k      0 --:--:--  0:00:38 --:--:-- 3159k
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  7  153M    7 11.0M    0     0  39.3M      0  0:00:03 --:--:--  0:00:03 39.3M 68  153M   68  104M    0     0  81.6M      0  0:00:01  0:00:01 --:--:-- 81.6M100  153M  100  153M    0     0  86.4M      0  0:00:01  0:00:01 --:--:-- 86.3M
 kernel tree size: 920M
 VERSION = 4
 PATCHLEVEL = 14
@@ -15,6 +15,8 @@ EXTRAVERSION =
 244:#if PF_MAX > 200
 patched classmap.h PF_MAX guard
 366:HOSTCFLAGS   := -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 \
+patched dm-rq.c: extern elv_register_queue
+12:extern int elv_register_queue(struct request_queue *q);
 ===== [2.5/7] 应用车机内核配置 =====
 config lines: 7162
 ===== [3/7] 集成 bcmdhd 驱动 =====
@@ -33,132 +35,100 @@ CONFIG_MODULES=y
 CONFIG_MODVERSIONS=y
 CONFIG_BCMDHD=m
 ===== [5/7] 编译 vmlinux (生成带真实 CRC 的 Module.symvers) =====
-start: 15:04:03
-!!! vmlinux build FAILED
---- error lines ---
-drivers/md/dm-rq.c:716:2: error: implicit declaration of function ‘elv_register_queue’; did you mean ‘blk_register_queue’? [-Werror=implicit-function-declaration]
-make[2]: *** [scripts/Makefile.build:328: drivers/md/dm-rq.o] Error 1
-make[1]: *** [scripts/Makefile.build:587: drivers/md] Error 2
+start: 15:13:52
+end: 15:24:05
+  LD      vmlinux
+  SORTEX  vmlinux
+  SYSMAP  System.map
+Module.symvers entries: 12048
+===== [6/7] 编译 bcmdhd.ko =====
+!!! module build FAILED
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux_platdev.c:350:37: error: ‘dhd_wlan_control’ undeclared (first use in this function); did you mean ‘dhd_wlan_init’?
+make[1]: *** [scripts/Makefile.build:328: drivers/net/wireless/broadcom/bcmdhd/dhd_linux_platdev.o] Error 1
+make: *** [Makefile:1527: _module_drivers/net/wireless/broadcom/bcmdhd] Error 2
+--- last 100 lines ---
+drivers/net/wireless/broadcom/bcmdhd/Makefile:270: warning: overriding recipe for target 'clean'
+drivers/net/wireless/broadcom/bcmdhd/Makefile:259: warning: ignoring old recipe for target 'clean'
+  CC [M]  drivers/net/wireless/broadcom/bcmdhd/aiutils.o
+  CC [M]  drivers/net/wireless/broadcom/bcmdhd/siutils.o
+  CC [M]  drivers/net/wireless/broadcom/bcmdhd/sbutils.o
+  CC [M]  drivers/net/wireless/broadcom/bcmdhd/bcmutils.o
+drivers/net/wireless/broadcom/bcmdhd/bcmutils.c: In function ‘pktsetprio’:
+drivers/net/wireless/broadcom/bcmdhd/bcmutils.c:275:17: warning: converting a packed ‘struct ether_header’ pointer (alignment 1) to a ‘struct ethervlan_header’ pointer (alignment 2) may result in an unaligned pointer value [-Waddress-of-packed-member]
+  275 |   evh = (struct ethervlan_header *)eh;
+      |                 ^~~~~~~~~~~~~~~~
+In file included from drivers/net/wireless/broadcom/bcmdhd/bcmutils.c:65:
+drivers/net/wireless/broadcom/bcmdhd/include/ethernet.h:124:30: note: defined here
+  124 | BWL_PRE_PACKED_STRUCT struct ether_header {
+      |                              ^~~~~~~~~~~~
+In file included from drivers/net/wireless/broadcom/bcmdhd/bcmutils.c:66:
+drivers/net/wireless/broadcom/bcmdhd/include/vlan.h:62:8: note: defined here
+   62 | struct ethervlan_header {
+      |        ^~~~~~~~~~~~~~~~
+drivers/net/wireless/broadcom/bcmdhd/bcmutils.c: In function ‘pktgetdscp’:
+drivers/net/wireless/broadcom/bcmdhd/bcmutils.c:424:17: warning: converting a packed ‘struct ether_header’ pointer (alignment 1) to a ‘struct ethervlan_header’ pointer (alignment 2) may result in an unaligned pointer value [-Waddress-of-packed-member]
+  424 |   evh = (struct ethervlan_header *)eh;
+      |                 ^~~~~~~~~~~~~~~~
+In file included from drivers/net/wireless/broadcom/bcmdhd/bcmutils.c:65:
+drivers/net/wireless/broadcom/bcmdhd/include/ethernet.h:124:30: note: defined here
+  124 | BWL_PRE_PACKED_STRUCT struct ether_header {
+      |                              ^~~~~~~~~~~~
+In file included from drivers/net/wireless/broadcom/bcmdhd/bcmutils.c:66:
+drivers/net/wireless/broadcom/bcmdhd/include/vlan.h:62:8: note: defined here
+   62 | struct ethervlan_header {
+      |        ^~~~~~~~~~~~~~~~
+  CC [M]  drivers/net/wireless/broadcom/bcmdhd/bcmwifi_channels.o
+  CC [M]  drivers/net/wireless/broadcom/bcmdhd/dhd_linux.o
+  CC [M]  drivers/net/wireless/broadcom/bcmdhd/dhd_linux_platdev.o
+  CC [M]  drivers/net/wireless/broadcom/bcmdhd/dhd_linux_sched.o
+In file included from drivers/net/wireless/broadcom/bcmdhd/include/linuxver.h:55,
+                 from drivers/net/wireless/broadcom/bcmdhd/dhd_linux.c:32:
+./include/linux/module.h:131:6: warning: ‘init_module’ specifies less restrictive attribute than its target ‘dhd_module_init’: ‘cold’ [-Wmissing-attributes]
+  131 |  int init_module(void) __attribute__((alias(#initfn)));
+      |      ^~~~~~~~~~~
+./include/linux/module.h:121:28: note: in expansion of macro ‘module_init’
+  121 | #define late_initcall(fn)  module_init(fn)
+      |                            ^~~~~~~~~~~
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux.c:12665:1: note: in expansion of macro ‘late_initcall’
+12665 | late_initcall(dhd_module_init);
+      | ^~~~~~~~~~~~~
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux.c:12576:1: note: ‘init_module’ target declared here
+12576 | dhd_module_init(void)
+      | ^~~~~~~~~~~~~~~
+In file included from drivers/net/wireless/broadcom/bcmdhd/include/linuxver.h:55,
+                 from drivers/net/wireless/broadcom/bcmdhd/dhd_linux.c:32:
+./include/linux/module.h:137:7: warning: ‘cleanup_module’ specifies less restrictive attribute than its target ‘dhd_module_exit’: ‘cold’ [-Wmissing-attributes]
+  137 |  void cleanup_module(void) __attribute__((alias(#exitfn)));
+      |       ^~~~~~~~~~~~~~
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux.c:12668:1: note: in expansion of macro ‘module_exit’
+12668 | module_exit(dhd_module_exit);
+      | ^~~~~~~~~~~
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux.c:12567:1: note: ‘cleanup_module’ target declared here
+12567 | dhd_module_exit(void)
+      | ^~~~~~~~~~~~~~~
+  CC [M]  drivers/net/wireless/broadcom/bcmdhd/dhd_pno.o
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux_platdev.c: In function ‘wifi_plat_dev_drv_probe’:
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux_platdev.c:350:37: error: ‘dhd_wlan_control’ undeclared (first use in this function); did you mean ‘dhd_wlan_init’?
+  350 |  adapter->wifi_plat_data = (void *)&dhd_wlan_control;
+      |                                     ^~~~~~~~~~~~~~~~
+      |                                     dhd_wlan_init
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux_platdev.c:350:37: note: each undeclared identifier is reported only once for each function it appears in
+make[1]: *** [scripts/Makefile.build:328: drivers/net/wireless/broadcom/bcmdhd/dhd_linux_platdev.o] Error 1
 make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1039: drivers] Error 2
---- last 120 lines ---
-  CC      drivers/mmc/host/cqhci.o
-  CC      drivers/media/media-entity.o
-  CC      drivers/media/v4l2-core/v4l2-event.o
-  CC      drivers/mmc/host/sdhci-xenon.o
-  CC      drivers/media/v4l2-core/v4l2-ctrls.o
-  CC      drivers/media/v4l2-core/v4l2-subdev.o
-  AR      drivers/media/media.o
-  CC      drivers/mmc/host/sdhci-xenon-phy.o
-  CC      drivers/media/v4l2-core/v4l2-clk.o
-drivers/media/v4l2-core/v4l2-ctrls.c: In function ‘validate_ctrls’:
-drivers/media/v4l2-core/v4l2-ctrls.c:3062:18: warning: taking address of packed member of ‘struct v4l2_ext_control’ may result in an unaligned pointer value [-Waddress-of-packed-member]
- 3062 |    p_new.p_s64 = &cs->controls[i].value64;
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~
-drivers/media/v4l2-core/v4l2-ctrls.c:3064:18: warning: taking address of packed member of ‘struct v4l2_ext_control’ may result in an unaligned pointer value [-Waddress-of-packed-member]
- 3064 |    p_new.p_s32 = &cs->controls[i].value;
-      |                  ^~~~~~~~~~~~~~~~~~~~~~
-  AR      drivers/mmc/host/armmmci.o
-  AR      drivers/mmc/host/sdhci-xenon-driver.o
-  AR      drivers/mmc/host/built-in.o
-  AR      drivers/mmc/built-in.o
-  CC      drivers/media/v4l2-core/v4l2-async.o
-  CC      drivers/media/v4l2-core/v4l2-compat-ioctl32.o
-  CC      drivers/media/v4l2-core/vb2-trace.o
-In file included from ./include/linux/uaccess.h:14,
-                 from ./include/linux/poll.h:12,
-                 from ./include/media/v4l2-dev.h:13,
-                 from drivers/media/v4l2-core/v4l2-compat-ioctl32.c:20:
-drivers/media/v4l2-core/v4l2-compat-ioctl32.c: In function ‘get_v4l2_ext_controls32’:
-drivers/media/v4l2-core/v4l2-compat-ioctl32.c:837:20: warning: taking address of packed member of ‘struct v4l2_ext_control’ may result in an unaligned pointer value [-Waddress-of-packed-member]
-  837 |   if (get_user(id, &kcontrols->id))
-./arch/arm64/include/asm/uaccess.h:299:36: note: in definition of macro ‘__get_user_check’
-  299 |  __typeof__(*(ptr)) __user *__p = (ptr);    \
-      |                                    ^~~
-./arch/arm64/include/asm/uaccess.h:322:18: note: in expansion of macro ‘__get_user’
-  322 | #define get_user __get_user
-      |                  ^~~~~~~~~~
-drivers/media/v4l2-core/v4l2-compat-ioctl32.c:837:7: note: in expansion of macro ‘get_user’
-  837 |   if (get_user(id, &kcontrols->id))
-      |       ^~~~~~~~
-drivers/media/v4l2-core/v4l2-compat-ioctl32.c:843:20: warning: taking address of packed member of ‘struct v4l2_ext_control32’ may result in an unaligned pointer value [-Waddress-of-packed-member]
-  843 |    if (get_user(p, &ucontrols->string))
-./arch/arm64/include/asm/uaccess.h:299:36: note: in definition of macro ‘__get_user_check’
-  299 |  __typeof__(*(ptr)) __user *__p = (ptr);    \
-      |                                    ^~~
-./arch/arm64/include/asm/uaccess.h:322:18: note: in expansion of macro ‘__get_user’
-  322 | #define get_user __get_user
-      |                  ^~~~~~~~~~
-drivers/media/v4l2-core/v4l2-compat-ioctl32.c:843:8: note: in expansion of macro ‘get_user’
-  843 |    if (get_user(p, &ucontrols->string))
-      |        ^~~~~~~~
-drivers/media/v4l2-core/v4l2-compat-ioctl32.c:846:20: warning: taking address of packed member of ‘struct v4l2_ext_control’ may result in an unaligned pointer value [-Waddress-of-packed-member]
-  846 |    if (put_user(s, &kcontrols->string))
-./arch/arm64/include/asm/uaccess.h:368:36: note: in definition of macro ‘__put_user_check’
-  368 |  __typeof__(*(ptr)) __user *__p = (ptr);    \
-      |                                    ^~~
-./arch/arm64/include/asm/uaccess.h:391:18: note: in expansion of macro ‘__put_user’
-  391 | #define put_user __put_user
-      |                  ^~~~~~~~~~
-drivers/media/v4l2-core/v4l2-compat-ioctl32.c:846:8: note: in expansion of macro ‘put_user’
-  846 |    if (put_user(s, &kcontrols->string))
-      |        ^~~~~~~~
-drivers/media/v4l2-core/v4l2-compat-ioctl32.c: In function ‘put_v4l2_ext_controls32’:
-drivers/media/v4l2-core/v4l2-compat-ioctl32.c:886:20: warning: taking address of packed member of ‘struct v4l2_ext_control’ may result in an unaligned pointer value [-Waddress-of-packed-member]
-  886 |   if (get_user(id, &kcontrols->id) ||
-./arch/arm64/include/asm/uaccess.h:299:36: note: in definition of macro ‘__get_user_check’
-  299 |  __typeof__(*(ptr)) __user *__p = (ptr);    \
-      |                                    ^~~
-./arch/arm64/include/asm/uaccess.h:322:18: note: in expansion of macro ‘__get_user’
-  322 | #define get_user __get_user
-      |                  ^~~~~~~~~~
-drivers/media/v4l2-core/v4l2-compat-ioctl32.c:886:7: note: in expansion of macro ‘get_user’
-  886 |   if (get_user(id, &kcontrols->id) ||
-      |       ^~~~~~~~
-drivers/media/v4l2-core/v4l2-compat-ioctl32.c:887:20: warning: taking address of packed member of ‘struct v4l2_ext_control32’ may result in an unaligned pointer value [-Waddress-of-packed-member]
-  887 |       put_user(id, &ucontrols->id) ||
-./arch/arm64/include/asm/uaccess.h:368:36: note: in definition of macro ‘__put_user_check’
-  368 |  __typeof__(*(ptr)) __user *__p = (ptr);    \
-      |                                    ^~~
-./arch/arm64/include/asm/uaccess.h:391:18: note: in expansion of macro ‘__put_user’
-  391 | #define put_user __put_user
-      |                  ^~~~~~~~~~
-drivers/media/v4l2-core/v4l2-compat-ioctl32.c:887:7: note: in expansion of macro ‘put_user’
-  887 |       put_user(id, &ucontrols->id) ||
-      |       ^~~~~~~~
-drivers/media/v4l2-core/v4l2-compat-ioctl32.c:888:40: warning: taking address of packed member of ‘struct v4l2_ext_control’ may result in an unaligned pointer value [-Waddress-of-packed-member]
-  888 |       assign_in_user(&ucontrols->size, &kcontrols->size) ||
-./arch/arm64/include/asm/uaccess.h:299:36: note: in definition of macro ‘__get_user_check’
-  299 |  __typeof__(*(ptr)) __user *__p = (ptr);    \
-      |                                    ^~~
-./arch/arm64/include/asm/uaccess.h:322:18: note: in expansion of macro ‘__get_user’
-  322 | #define get_user __get_user
-      |                  ^~~~~~~~~~
-drivers/media/v4l2-core/v4l2-compat-ioctl32.c:888:7: note: in expansion of macro ‘assign_in_user’
-  888 |       assign_in_user(&ucontrols->size, &kcontrols->size) ||
-      |       ^~~~~~~~~~~~~~
-drivers/media/v4l2-core/v4l2-compat-ioctl32.c:888:22: warning: taking address of packed member of ‘struct v4l2_ext_control32’ may result in an unaligned pointer value [-Waddress-of-packed-member]
-  888 |       assign_in_user(&ucontrols->size, &kcontrols->size) ||
-./arch/arm64/include/asm/uaccess.h:368:36: note: in definition of macro ‘__put_user_check’
-  368 |  __typeof__(*(ptr)) __user *__p = (ptr);    \
-      |                                    ^~~
-./arch/arm64/include/asm/uaccess.h:391:18: note: in expansion of macro ‘__put_user’
-  391 | #define put_user __put_user
-      |                  ^~~~~~~~~~
-drivers/media/v4l2-core/v4l2-compat-ioctl32.c:888:7: note: in expansion of macro ‘assign_in_user’
-  888 |       assign_in_user(&ucontrols->size, &kcontrols->size) ||
-      |       ^~~~~~~~~~~~~~
-  CC      drivers/media/v4l2-core/v4l2-trace.o
-  CC      drivers/media/v4l2-core/v4l2-mc.o
-  CC      drivers/media/v4l2-core/v4l2-common.o
-  CC      drivers/media/v4l2-core/v4l2-dv-timings.o
-  CC      drivers/media/v4l2-core/v4l2-mem2mem.o
-  CC      drivers/media/v4l2-core/videobuf2-core.o
-  CC      drivers/media/v4l2-core/videobuf2-v4l2.o
-  CC      drivers/media/v4l2-core/videobuf2-memops.o
-  CC      drivers/media/v4l2-core/videobuf2-vmalloc.o
-  CC      drivers/media/v4l2-core/videobuf2-dma-contig.o
-  AR      drivers/media/v4l2-core/videodev.o
-  AR      drivers/media/v4l2-core/built-in.o
-  AR      drivers/media/built-in.o
-make: *** [Makefile:1039: drivers] Error 2
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux.c: In function ‘dhd_dev_start_mkeep_alive’:
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux.c:14657:2: warning: ‘strncpy’ output truncated before terminating nul copying 11 bytes from a string of the same length [-Wstringop-truncation]
+14657 |  strncpy(pbuf, str, str_len);
+      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux.c: In function ‘dhd_convert_memdump_type_to_str’:
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux.c:15709:2: warning: ‘strncpy’ output may be truncated copying between 7 and 31 bytes from a string of length 31 [-Wstringop-truncation]
+15709 |  strncpy(buf, type_str, strlen(type_str));
+      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux.c: In function ‘dhd_allocate_if’:
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux.c:7800:3: warning: ‘strncpy’ specified bound 16 equals destination size [-Wstringop-truncation]
+ 7800 |   strncpy(ifp->net->name, name, IFNAMSIZ);
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux.c: In function ‘dhd_ifadd_event_handler’:
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux.c:2806:3: warning: ‘strncpy’ output may be truncated copying 16 bytes from a string of length 16 [-Wstringop-truncation]
+ 2806 |   strncpy(info.name, if_event->name, IFNAMSIZ);
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+make: *** [Makefile:1527: _module_drivers/net/wireless/broadcom/bcmdhd] Error 2

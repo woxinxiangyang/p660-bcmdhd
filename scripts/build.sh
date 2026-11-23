@@ -103,17 +103,25 @@ grep -E "^CONFIG_(BCMDHD|MODVERSIONS|MODULES)=" .config || true
 grep -q "^CONFIG_BCMDHD=m" .config || { echo "ERROR: CONFIG_BCMDHD not =m"; exit 1; }
 
 echo "===== [5/7] 编译 vmlinux (生成带真实 CRC 的 Module.symvers) ====="
-echo "start: $(date -u +%H:%M:%S)"
-if ! mk -j"$JOBS" vmlinux > vmlinux_build.log 2>&1; then
-  echo "!!! vmlinux build FAILED"
-  echo "--- error lines ---"
-  grep -E "error:|Error [0-9]|\*\*\*" vmlinux_build.log | head -40 || true
-  echo "--- last 120 lines ---"
-  tail -120 vmlinux_build.log
-  exit 1
+CFGSUM=$(sha256sum .config | cut -d' ' -f1)
+STAMP="$KERNEL/.config.built"
+if [ -f Module.symvers ] && [ "$(wc -l < Module.symvers)" -gt 10000 ] \
+   && [ -f "$STAMP" ] && [ "$(cat "$STAMP")" = "$CFGSUM" ]; then
+  echo "缓存命中：Module.symvers 已存在（$(wc -l < Module.symvers) 条），.config 未变化，跳过 vmlinux 编译"
+else
+  echo "start: $(date -u +%H:%M:%S)"
+  if ! mk -j"$JOBS" vmlinux > vmlinux_build.log 2>&1; then
+    echo "!!! vmlinux build FAILED"
+    echo "--- error lines ---"
+    grep -E "error:|Error [0-9]|\*\*\*" vmlinux_build.log | head -40 || true
+    echo "--- last 120 lines ---"
+    tail -120 vmlinux_build.log
+    exit 1
+  fi
+  echo "end: $(date -u +%H:%M:%S)"
+  tail -3 vmlinux_build.log
+  echo "$CFGSUM" > "$STAMP"
 fi
-echo "end: $(date -u +%H:%M:%S)"
-tail -3 vmlinux_build.log
 echo "Module.symvers entries: $(wc -l < Module.symvers)"
 
 echo "===== [6/7] 编译 bcmdhd.ko ====="
