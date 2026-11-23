@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     timeout-minutes: 120
     steps:
       - name: Checkout
@@ -21,12 +21,14 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y -qq bc bison flex libssl-dev build-essential \
             gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu python3 curl
+          sudo apt-get install -y -qq gcc-10 || echo "gcc-10 unavailable, fallback to default"
+          gcc-10 --version 2>/dev/null | head -1 || echo "no gcc-10"
+          aarch64-linux-gnu-gcc --version | head -1
 
       - name: Build bcmdhd.ko
         run: |
           chmod +x scripts/*.sh
-          set -o pipefail
-          WORK=$PWD/work bash -x scripts/build.sh 2>&1 | tee build.log
+          WORK=$PWD/work bash scripts/build.sh 2>&1 | tee build.log
         continue-on-error: true
 
       - name: Upload artifact
@@ -36,6 +38,7 @@ jobs:
           name: bcmdhd-p660
           path: |
             work/out/*.ko
+            work/out/*.log
             build.log
           if-no-files-found: warn
 
@@ -44,6 +47,8 @@ jobs:
         run: |
           mkdir -p logs
           cp build.log logs/build.log 2>/dev/null || echo "build.log missing" > logs/build.log
+          cp work/linux-imx/vmlinux_build.log logs/ 2>/dev/null || true
+          cp work/linux-imx/module_build.log logs/ 2>/dev/null || true
           cp work/out/*.ko logs/ 2>/dev/null || true
           ls -la logs
           git config user.name "ci-bot"
@@ -56,6 +61,6 @@ jobs:
         if: always()
         run: |
           if ! grep -q "^DONE:" build.log 2>/dev/null; then
-            echo "::error::build did not complete - see ci-logs branch"
+            echo "::error::build did not complete - see ci-logs branch for full log"
             exit 1
           fi
