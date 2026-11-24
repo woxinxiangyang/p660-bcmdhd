@@ -1,0 +1,204 @@
+HOSTCC  = gcc-10 (gcc-10 (Ubuntu 10.5.0-1ubuntu1~22.04.3) 10.5.0)
+CROSSCC = aarch64-linux-gnu-gcc (Ubuntu 10.5.0-1ubuntu1~22.04.3) 10.5.0
+JOBS    = 4
+===== [1/7] 下载 NXP 内核源码 =====
+kernel tree size: 1.4G
+VERSION = 4
+PATCHLEVEL = 14
+SUBLEVEL = 78
+EXTRAVERSION =
+366:HOSTCFLAGS   := -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 \
+===== [2/7] 宿主工具链兼容性修补 =====
+244:#if PF_MAX > 200
+patched classmap.h PF_MAX guard
+366:HOSTCFLAGS   := -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 \
+12:extern int elv_register_queue(struct request_queue *q);
+===== [2.5/7] 应用车机内核配置 =====
+config lines: 7162
+===== [3/7] 集成 bcmdhd 驱动 =====
+== 复制驱动源码 ==
+== 挂接 Kconfig ==
+== 挂接 Makefile ==
+== 集成完成 ==
+/home/runner/work/p660-bcmdhd/p660-bcmdhd/work/linux-imx/drivers/net/wireless/broadcom/Kconfig:17:source "drivers/net/wireless/broadcom/bcmdhd/Kconfig"
+/home/runner/work/p660-bcmdhd/p660-bcmdhd/work/linux-imx/drivers/net/wireless/broadcom/Makefile:6:obj-$(CONFIG_BCMDHD)	+= bcmdhd/
+74
+40
+Kconfig hooked
+Makefile hooked
+===== [4/7] olddefconfig =====
+CONFIG_MODULES=y
+CONFIG_MODVERSIONS=y
+CONFIG_BCMDHD=m
+===== [5/7] 编译 vmlinux (生成带真实 CRC 的 Module.symvers) =====
+缓存命中：Module.symvers 已存在（12048 条），.config 未变化，跳过 vmlinux 编译
+Module.symvers entries: 12048
+===== [6/7] 编译 bcmdhd.ko =====
+drivers/net/wireless/broadcom/bcmdhd/Makefile:270: warning: overriding recipe for target 'clean'
+drivers/net/wireless/broadcom/bcmdhd/Makefile:259: warning: ignoring old recipe for target 'clean'
+drivers/net/wireless/broadcom/bcmdhd/bcmutils.c:275:17: warning: converting a packed ‘struct ether_header’ pointer (alignment 1) to a ‘struct ethervlan_header’ pointer (alignment 2) may result in an unaligned pointer value [-Waddress-of-packed-member]
+drivers/net/wireless/broadcom/bcmdhd/bcmutils.c:424:17: warning: converting a packed ‘struct ether_header’ pointer (alignment 1) to a ‘struct ethervlan_header’ pointer (alignment 2) may result in an unaligned pointer value [-Waddress-of-packed-member]
+./include/linux/module.h:131:6: warning: ‘init_module’ specifies less restrictive attribute than its target ‘dhd_module_init’: ‘cold’ [-Wmissing-attributes]
+./include/linux/module.h:137:7: warning: ‘cleanup_module’ specifies less restrictive attribute than its target ‘dhd_module_exit’: ‘cold’ [-Wmissing-attributes]
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux.c:14657:2: warning: ‘strncpy’ output truncated before terminating nul copying 11 bytes from a string of the same length [-Wstringop-truncation]
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux.c:15709:2: warning: ‘strncpy’ output may be truncated copying between 7 and 31 bytes from a string of length 31 [-Wstringop-truncation]
+drivers/net/wireless/broadcom/bcmdhd/include/bcmutils.h:39:57: warning: ‘strncpy’ output truncated before terminating nul copying 14 bytes from a string of the same length [-Wstringop-truncation]
+drivers/net/wireless/broadcom/bcmdhd/include/bcmutils.h:39:57: warning: ‘strncpy’ output truncated before terminating nul copying 62 bytes from a string of the same length [-Wstringop-truncation]
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux.c:7800:3: warning: ‘strncpy’ specified bound 16 equals destination size [-Wstringop-truncation]
+drivers/net/wireless/broadcom/bcmdhd/dhd_linux.c:2806:3: warning: ‘strncpy’ output may be truncated copying 16 bytes from a string of length 16 [-Wstringop-truncation]
+drivers/net/wireless/broadcom/bcmdhd/dhd_dbg_ring.h:100:3: warning: ‘strncpy’ output may be truncated copying 31 bytes from a string of length 31 [-Wstringop-truncation]
+drivers/net/wireless/broadcom/bcmdhd/dhd_config.c:1458:4: warning: ‘strncat’ output may be truncated copying 12 bytes from a string of length 15 [-Wstringop-truncation]
+drivers/net/wireless/broadcom/bcmdhd/wl_android_ext.c:1365:4: warning: ‘strncpy’ output may be truncated copying 2 bytes from a string of length 99 [-Wstringop-truncation]
+drivers/net/wireless/broadcom/bcmdhd/dhd_sdio.c:7959:3: warning: ‘strncpy’ specified bound 16 equals destination size [-Wstringop-truncation]
+drivers/net/wireless/broadcom/bcmdhd/dhd_gpio.c:167:3: warning: passing argument 4 of ‘bus_find_device’ from incompatible pointer type [-Wincompatible-pointer-types]
+drivers/net/wireless/broadcom/bcmdhd/Makefile:270: warning: overriding recipe for target 'clean'
+drivers/net/wireless/broadcom/bcmdhd/Makefile:259: warning: ignoring old recipe for target 'clean'
+  Building modules, stage 2.
+drivers/net/wireless/broadcom/bcmdhd/Makefile:270: warning: overriding recipe for target 'clean'
+drivers/net/wireless/broadcom/bcmdhd/Makefile:259: warning: ignoring old recipe for target 'clean'
+  MODPOST 1 modules
+  CC      drivers/net/wireless/broadcom/bcmdhd/bcmdhd.mod.o
+  LD [M]  drivers/net/wireless/broadcom/bcmdhd/bcmdhd.ko
+===== [7/7] 产物检查 + CRC 核对 =====
+KO file: drivers/net/wireless/broadcom/bcmdhd/bcmdhd.ko
+-rw-r--r-- 1 runner runner 3031240 Nov 24 00:30 drivers/net/wireless/broadcom/bcmdhd/bcmdhd.ko
+COMMON symbol check: clean
+VERMAGIC: 4.14.78 SMP preempt mod_unload modversions aarch64
+KO SIZE: 3031240
+
+===== CRC 核对报告 =====
+参考符号数(原厂驱动): 289
+  一致        : 163  (56%)
+  CRC 不一致  : 126
+  新内核缺失  : 0
+
+--- CRC 不一致明细 ---
+  PDE_DATA: ref=0xc0f647a2 new=0xd9c7c9e8
+  __alloc_skb: ref=0x4d423221 new=0xb8b36355
+  __cfg80211_alloc_event_skb: ref=0x0dad0f18 new=0xe958862f
+  __cfg80211_alloc_reply_skb: ref=0xfa398c0a new=0xcd36e46e
+  __cfg80211_send_event_skb: ref=0x4f8f8d2e new=0xa9c39a29
+  __dev_kfree_skb_any: ref=0x2cb50fa9 new=0xf4f89175
+  __napi_schedule: ref=0x3a95669a new=0x8c41ef19
+  __netdev_alloc_skb: ref=0x9ec67b9e new=0xf3d408e2
+  __netlink_kernel_create: ref=0xa86ef542 new=0xf437e723
+  __nlmsg_put: ref=0xdb197dc0 new=0xca59b6b6
+  __pci_register_driver: ref=0x2f594ece new=0xffb73289
+  __platform_driver_register: ref=0x12b876da new=0xbdc357b2
+  alloc_etherdev_mqs: ref=0x10a7459a new=0xee8c1409
+  bus_find_device: ref=0xef11d979 new=0xa8b576d2
+  bus_for_each_dev: ref=0x925e533b new=0x04d8ca44
+  cfg80211_ch_switch_notify: ref=0xa6dca955 new=0x77c254a0
+  cfg80211_connect_done: ref=0x2c00135e new=0xf0497808
+  cfg80211_del_sta_sinfo: ref=0x0cc8db20 new=0xbfa81767
+  cfg80211_disconnected: ref=0xdfc15447 new=0xb3b29968
+  cfg80211_get_bss: ref=0x1258eecc new=0xffa4be88
+  cfg80211_ibss_joined: ref=0x74c16b65 new=0xa39b7ed6
+  cfg80211_inform_bss_frame_data: ref=0xc3881fe1 new=0x27efd230
+  cfg80211_mgmt_tx_status: ref=0x54cbf061 new=0xd1d913eb
+  cfg80211_michael_mic_failure: ref=0xa1bcd7dc new=0x4c49f882
+  cfg80211_new_sta: ref=0x0a0d8db5 new=0xabcdc6ac
+  cfg80211_put_bss: ref=0x73e83c36 new=0x158a0faa
+  cfg80211_ready_on_channel: ref=0xb484879f new=0x72ab47fd
+  cfg80211_remain_on_channel_expired: ref=0x78972b5c new=0x14b24804
+  cfg80211_roamed: ref=0x084fbb01 new=0x9a863c8e
+  cfg80211_rx_mgmt: ref=0x4d686f43 new=0xd40a970b
+  cfg80211_scan_done: ref=0x254be731 new=0x6c4e6d3c
+  cfg80211_sched_scan_results: ref=0x7af0bd61 new=0x6ddc000b
+  cfg80211_unlink_bss: ref=0xc8e19c4e new=0x7341f9b5
+  cfg80211_unregister_wdev: ref=0x8ce80003 new=0xa16614ee
+  cfg80211_vendor_cmd_reply: ref=0x2ec59cb7 new=0x0db62a01
+  consume_skb: ref=0xb64bae66 new=0xd58fc8a8
+  debugfs_create_dir: ref=0xe2e90527 new=0x7f21a407
+  debugfs_create_file: ref=0xd6c949ef new=0x207acfad
+  debugfs_remove_recursive: ref=0xe1ef6488 new=0x5ac09bb3
+  dev_close: ref=0x6c175100 new=0xd0fb344f
+  dget_parent: ref=0x39f5b697 new=0x73c9a0d2
+  dma_alloc_from_dev_coherent: ref=0x88da4464 new=0x2746c4a2
+  dma_release_from_dev_coherent: ref=0xe7530f38 new=0x634ae4d6
+  dput: ref=0x7d69323c new=0xd5a07888
+  dummy_dma_ops: ref=0x1036c0bb new=0x05ee709c
+  eth_type_trans: ref=0x2703dfb6 new=0xfa0a0b6d
+  filp_close: ref=0xbc976aad new=0x8567f4b6
+  filp_open: ref=0x596c7717 new=0xb2286c44
+  free_netdev: ref=0xd502f1f5 new=0x91586d5a
+  generic_file_llseek: ref=0x12abe948 new=0x3a205d7e
+  ieee80211_get_channel: ref=0xc0a5a64c new=0x40fb3c7f
+  init_net: ref=0x05f6c4d8 new=0x55a8af4d
+  irq_to_desc: ref=0x89d9fa71 new=0xdb0f8af5
+  kern_path: ref=0xf31be21d new=0x7e287270
+  kernel_read: ref=0x530c4ff6 new=0x10f7efc4
+  kernel_write: ref=0xd9f643b0 new=0x583f34bf
+  kfree_skb: ref=0x81d6758b new=0x5b3ba6ae
+  kmalloc_caches: ref=0x66062c72 new=0xa132dda9
+  kmem_cache_alloc_trace: ref=0x63f73e1a new=0x61e296f9
+  kobject_uevent: ref=0x1363c321 new=0x327c1618
+  kthread_create_on_node: ref=0x124a7c5f new=0xcfebd2d8
+  module_layout: ref=0x0e799a8e new=0x550b93a1
+  napi_complete_done: ref=0x856c8a44 new=0x37d23ee8
+  napi_disable: ref=0xc3007d5d new=0x05f203a6
+  napi_schedule_prep: ref=0xf7131e8e new=0xecbb9efe
+  netif_napi_add: ref=0x0639c39b new=0xfb8583b1
+  netif_napi_del: ref=0x6dece0e5 new=0x7d9cdf4b
+  netif_receive_skb: ref=0xdb4ca3bb new=0x6f6879eb
+  netif_rx: ref=0x7e6eb112 new=0xcc2630be
+  netif_rx_ni: ref=0xe10a56f0 new=0x42fbef86
+  netif_tx_wake_queue: ref=0x7ec135b0 new=0xa7213eeb
+  netlink_kernel_release: ref=0xff72b123 new=0x9453de17
+  netlink_unicast: ref=0x95586dc3 new=0x08ec077a
+  param_ops_bool: ref=0x1c1f0e82 new=0x2dcb2b5d
+  param_ops_charp: ref=0xdf6699ef new=0xc93b828f
+  param_ops_int: ref=0x7c9abb40 new=0xc6318bee
+  param_ops_string: ref=0xc314626f new=0x8eb05e2c
+  param_ops_uint: ref=0x686de8a2 new=0x59b9cd7d
+  path_put: ref=0x7e45642c new=0xb36353a7
+  pci_alloc_irq_vectors_affinity: ref=0x1376df34 new=0x676c70bc
+  pci_disable_device: ref=0xd1f6b076 new=0x4531b60d
+  pci_enable_device: ref=0x31af4472 new=0xe45112e4
+  pci_enable_wake: ref=0x5188423d new=0x710e1062
+  pci_find_capability: ref=0xebc9291f new=0x015aa798
+  pci_find_ext_capability: ref=0x3230a7ee new=0xe262b5a6
+  pci_free_irq_vectors: ref=0x1f3d45c5 new=0xbf72478b
+  pci_get_device: ref=0xac4a9ec7 new=0x6f33b791
+  pci_load_and_free_saved_state: ref=0x4fec0002 new=0x162b1b37
+  pci_load_saved_state: ref=0x80662b45 new=0xce3acb51
+  pci_read_config_dword: ref=0x630466ec new=0x429d141a
+  pci_restore_state: ref=0x770caabc new=0x32d27b22
+  pci_save_state: ref=0x75f0c097 new=0xe58861f1
+  pci_set_master: ref=0x4b2accbb new=0x36ac8653
+  pci_set_power_state: ref=0x6705bcea new=0xbc4c2914
+  pci_store_saved_state: ref=0xe2292a6a new=0xfaddfe70
+  pci_unregister_driver: ref=0x95a362e9 new=0x374d9c04
+  pci_write_config_dword: ref=0xbbdc7075 new=0x4c5a4985
+  platform_bus_type: ref=0x44e83573 new=0x50a07999
+  platform_driver_unregister: ref=0x7715107b new=0xa8cf46f8
+  platform_get_resource_byname: ref=0x81573735 new=0x136e9e36
+  proc_create_data: ref=0xad99e28e new=0xa334a77b
+  register_netdev: ref=0x139c6637 new=0x9df4442c
+  register_netdevice: ref=0x96cc36ea new=0x8eb4fd3e
+  remove_proc_entry: ref=0x98f2fa8f new=0x72c89e5f
+  sched_setscheduler: ref=0x29553597 new=0x8d12be98
+  set_cpus_allowed_ptr: ref=0xfa73be44 new=0xe18e6c68
+  single_open: ref=0xebd5ee50 new=0x0224f657
+  single_release: ref=0x114f2cd0 new=0x7c293065
+  skb_clone: ref=0x56f2e564 new=0x857d227a
+  skb_dequeue: ref=0xfe6ac89a new=0xa7592dfd
+  skb_pull: ref=0x2f476334 new=0xb9b98f1f
+  skb_push: ref=0xc5d5f55f new=0xebb33ca9
+  skb_queue_purge: ref=0x5a4e88d1 new=0xb9546b9a
+  skb_queue_tail: ref=0x6539c7c0 new=0xc48e1729
+  skb_realloc_headroom: ref=0x47e86ef0 new=0xb44a0608
+  sock_wfree: ref=0x0bded6f8 new=0x5286e045
+  unregister_netdev: ref=0x4eba17e0 new=0xf44a45ae
+  unregister_netdevice_queue: ref=0xeef6f4ac new=0x1a44f3ab
+  vfs_fsync: ref=0x69f6388d new=0xbb29c454
+  vfs_unlink: ref=0x495b80ac new=0x091bd699
+  wake_up_process: ref=0xa1cf9fd4 new=0xf478f323
+  wiphy_apply_custom_regulatory: ref=0xbc5466e1 new=0x9af7ea34
+  wiphy_free: ref=0x576dd152 new=0x7d487244
+  wiphy_new_nm: ref=0xc864f8e8 new=0x66fa9e13
+  wiphy_register: ref=0xd87c288c new=0x0de63459
+  wiphy_unregister: ref=0xa1ffadfc new=0x7fa82f59
+
+VERDICT: FAIL
+DONE: /home/runner/work/p660-bcmdhd/p660-bcmdhd/work/out/bcmdhd.ko
