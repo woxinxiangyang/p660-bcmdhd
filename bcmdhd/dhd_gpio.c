@@ -2,6 +2,10 @@
 #include <osl.h>
 #include <dhd_linux.h>
 #include <linux/gpio.h>
+#include <linux/device.h>
+#include <linux/platform_device.h>
+#include <linux/mmc/core.h>
+#include <linux/mmc/host.h>
 
 #if defined(BUS_POWER_RESTORE) && defined(BCMSDIO)
 #include <linux/mmc/core.h>
@@ -138,6 +142,50 @@ static int dhd_wlan_set_reset(int onoff)
 	return 0;
 }
 
+/* i.MX8: after WL_REG_ON is pulled high the SDIO card must be re-enumerated
+ * by triggering an mmc rescan on the wifi usdhc controller, otherwise the
+ * card never appears and the driver times out ("failed to power up").
+ * Replaces the vendor kernel's custom sdhci_force_presence_change(). */
+static int dhd_wlan_match_pdev(struct device *dev, const void *data)
+{
+	return dev && dev_name(dev) && !strcmp(dev_name(dev), (const char *)data);
+}
+
+static int dhd_wlan_match_mmc_child(struct device *dev, void *data)
+{
+	return dev && dev_name(dev) && !strncmp(dev_name(dev), "mmc", 3);
+}
+
+static int dhd_wlan_mmc_rescan(const char *pdev_name)
+{
+	struct device *pdev;
+	struct device *cdev;
+	struct mmc_host *host;
+	int ret = -ENODEV;
+
+	pdev = bus_find_device(&platform_bus_type, NULL, (void *)pdev_name,
+		dhd_wlan_match_pdev);
+	if (!pdev) {
+		printf("[dhd] %s: usdhc device %s not found\n", __FUNCTION__, pdev_name);
+		return ret;
+	}
+
+	cdev = device_find_child(pdev, (void *)"mmc", dhd_wlan_match_mmc_child);
+	if (!cdev) {
+		printf("[dhd] %s: no mmc host under %s\n", __FUNCTION__, pdev_name);
+		put_device(pdev);
+		return ret;
+	}
+
+	host = container_of(cdev, struct mmc_host, class_dev);
+	printf("[dhd] %s: trigger rescan on %s\n", __FUNCTION__, dev_name(cdev));
+	mmc_detect_change(host, msecs_to_jiffies(200));
+	put_device(cdev);
+	put_device(pdev);
+	ret = 0;
+	return ret;
+}
+
 static int dhd_wlan_set_carddetect(int present)
 {
 	int err = 0;
@@ -152,6 +200,7 @@ static int dhd_wlan_set_carddetect(int present)
 #ifdef CUSTOMER_HW_AMLOGIC
 		sdio_reinit();
 #endif
+		err = dhd_wlan_mmc_rescan("5b020000.usdhc");
 #elif defined(BCMPCIE)
 		printf("======== Card detection to detect PCIE card! ========\n");
 #endif
@@ -165,6 +214,7 @@ static int dhd_wlan_set_carddetect(int present)
 		extern_wifi_set_enable(0);
 		mdelay(200);
 #endif
+		dhd_wlan_mmc_rescan("5b020000.usdhc");
 #elif defined(BCMPCIE)
 		printf("======== Card detection to remove PCIE card! ========\n");
 #ifdef CUSTOMER_HW_AMLOGIC
